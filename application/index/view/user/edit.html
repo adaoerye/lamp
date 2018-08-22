@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>修改</title>
+	<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+	<div class="container">
+		<div class="col-md-6 col-md-offset-3">
+			<h2>信息修改</h2>
+			<hr>
+			<form action="{:url('/update')}" method="post" enctype="multipart/form-data">
+				<div class="form-group">
+                    <label for="exampleInputEmail1">用户名</label>
+                    <input type="hidden" name="id" value="<?= $users['id'] ?>">
+                    <input type="text" class="form-control" id="exampleInputEmail1" name="username" value="<?= $users['username'] ?>">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">密码</label>
+                    <input type="password" class="form-control" id="exampleInputPassword1"  name="password" value="<?= $users['password'] ?>">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputFile">头像:&nbsp;&nbsp;</label>
+                    <img width="50" src="<?= $users['pic'] ?>" alt="">
+                    <input type="file" name="pic">
+                    
+                </div>
+                <button type="submit" class="btn btn-inverse">修改</button>	
+			</form>
+
+		</div>
+	</div>
+	
+</body>
+</html>

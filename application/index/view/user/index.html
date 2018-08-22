@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>用户列表</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#"><b>用户列表</b></a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                {if {:session('homeFlag')}
+                <button class="btn btn-info" type="button" style="margin-top:10px;margin-left:1400px">你好:{:session('username')}</button>
+                {else /}
+                <a href="/login">
+                    <button class="btn btn-info" type="button" style="margin-top:10px;margin-left:1140px">请登录</button>
+                </a>
+                {/if}
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> 操作<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            {if {:session('homeFlag')}
+                            <li><a href="/logout">退出</a></li>
+                            {else /}
+                            <li><a href="/login">登录</a></li>
+                            <li><a href="/create">注册</a></li>
+                            {/if}
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12 col-md-6 col-lg-6 col-lg-offset-3">
+                <h2>用户列表 <a href="/create"><button class="btn btn-success btn-mini" type="button">添加</button></a></h2>
+                <hr>
+                <table class="table table-hover table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                ID
+                            </th>
+                            <th>
+                                用户名
+                            </th>
+                            <th>
+                                头像
+                            </th>
+                            <th>
+                                创建时间
+                            </th>
+                            <th>
+                                操作
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $users as $k=>$v}
+                        <tr class="success">
+                            <td>
+                                <?= $v['id'] ?>
+                            </td>
+                            <td>
+                                <?= $v['username'] ?>
+                            </td>
+                            <td>
+                                <img width="30" src="<?= $v['pic'] ?>" alt="">
+                            </td>
+                            <td>
+                                <?= date('Y-m-d H:i:s',$v['create_at']) ?>
+                            </td>
+                            <td>
+                                <a href="/edit?id=<?= $v['id'] ?>">
+                                    <button class="btn btn-primary" type="button">修改</button>
+                                </a>
+                                <a href="/delete?id=<?= $v['id'] ?>">
+                                    <button class="btn btn-danger" type="button">删除</button>
+                                </a>
+                                <a href="/center?id=<?= $v['id'] ?>">
+                                    <button class="btn btn-warning" type="button">个人中心</button>
+                                </a>
+                            </td>
+                        </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

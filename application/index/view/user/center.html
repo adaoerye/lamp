@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>微博首页</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.bootcss.com/holder/2.9.4/holder.min.js"></script>
+    <style>
+    .banner {
+        height: 260px;
+        background: white;
+        padding-top: 50px;
+    }
+    
+    .ershi {
+        height: 20px;
+    }
+    
+    body {
+        background: #eee;
+        height: 2000px;
+    }
+    
+    .data {
+        min-height: 100px;
+        background: white;
+        padding-top: 20px;
+    }
+    
+    .data > div {
+        border-right: solid 1px #ddd;
+    }
+    
+    .data > div:last-child {
+        border-right: none;
+    }
+    
+    .fans {
+        min-height: 100px;
+        background: white;
+        padding: 5px;
+        overflow: hidden;
+    }
+    
+    .nopadding {
+        padding: 0px;
+    }
+    
+    .weibo {
+        padding: 0px;
+        min-height: 200px;
+    }
+    
+    .weibo > .item {
+        height: auto;
+        overflow: hidden;
+        background: white;
+        padding: 20px 0px 20px 20px;
+    }
+    
+    .nomargin {
+        margin: 0px;
+    }
+    </style>
+</head>
+
+<body>
+    <!-- nav start -->
+    <!-- nav start -->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#"><b>微博</b></a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                {if {:session('homeFlag')}
+                <button class="btn btn-info" type="button" style="margin-top:10px;margin-left:1400px">你好:{:session('username')}</button>
+                {else /}
+                <a href="/login">
+                    <button class="btn btn-info" type="button" style="margin-top:10px;margin-left:1440px">请登录</button>
+                </a>
+                {/if}
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> 操作<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            {if {:session('homeFlag')}
+                            <li><a href="/logout">退出</a></li>
+                            {else /}
+                            <li><a href="/login">登录</a></li>
+                            <li><a href="/create">注册</a></li>
+                            {/if}
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+    <!-- nav end -->
+    <!-- nav end -->
+    <div class="container col-md-8 col-md-offset-2">
+        <!-- banner start -->
+        <div class="banner">
+            <div id="pic" class="text-center">
+                <img src="<?= $data['pic']?>" width="60" class="img-circle" alt="">
+            </div>
+            <h4 class="text-center"><?= $data['username']?></h4>
+            <div class="btns text-center">
+                <button class="btn btn-danger follow ">关注</button>
+            </div>
+        </div>
+        <!-- banner end -->
+        <div class="ershi"></div>
+        <!-- left start  -->
+        <div class="col-md-3" style="padding-left:0px;">
+            <!-- data start  -->
+            <div class="data">
+                <div class="col-md-4">
+                    <center>
+                        <p id="fanss">0</p>
+                    </center>
+                    <button class="btn btn-success btn-mini" type="button">粉丝</button>
+                </div>
+                <div class="col-md-4">
+                    <center>
+                        <p id="follows">0</p>
+                    </center>
+                    <button class="btn btn-warning btn-mini" type="button">关注</button>
+                </div>
+                <div class="col-md-4">
+                    <center>
+                        <p>
+                            <?= $weibosize ?>
+                        </p>
+                    </center>
+                    <button class="btn btn-primary btn-mini" type="button">微博</button>
+                </div>
+            </div>
+            <!-- data end  -->
+            <a href="/send?uid={:session('uid')}">
+                <button class="btn btn-block btn-primary" type="button">发微博</button>
+            </a>
+            <div class="ershi"></div>
+            <!-- fans start  -->
+            <div class="fans">
+                <h4>粉丝列表</h4>
+                <hr>
+                <section>
+                    <?php foreach($ppids as $value){ ?>
+                    <div class="col-md-4 nopadding">
+                        <p>
+                            <?= $value['username'] ?>
+                        </p>
+                        <img src="<?= $value['pic'] ?>" width="40" height="40" class="img-circle" alt="">
+                    </div>
+                    <?php } ?>
+                </section>
+            </div>
+            <!-- fans end -->
+        </div>
+        <!-- left end -->
+        <!-- right start -->
+        <div class="col-md-9 weibo">
+            {foreach $weibos as $k => $v}
+            <div class="item">
+                <div class="left col-md-1 nopadding" style="margin-right:10px">
+                    <img src="<?= $data['pic']?>" width="30" height="30" class="img-circle" alt="">
+                </div>
+                <div class="left col-md-10 nopadding">
+                    <h5><?= $data['username']?><?= date('Y-m-d H:i:s',$v['create_at']) ?> </h5>
+                    <hr class="nomargin">
+                    <p>{$v.title}</p>
+                    <p>{$v.content}</p>
+                </div>
+            </div>
+            <div style="clear:both"></div>
+            <div class="ershi"></div>
+            {/foreach}
+        </div>
+        <!-- right end -->
+    </div>
+</body>
+<script>
+$(function() {
+    //获取登录状态
+    var hasLogin = '{:session('uid')}';
+    //获取个人id
+    var href = location.href;
+    var id = href.substr(33);
+    //发送ajax查询粉丝数量
+    $.ajax({
+            url: '/fanss',
+            type: 'post',
+            data: {id:id},
+            success: function(data) {
+                $('#fanss').html(data);
+            },
+            async: false
+        })
+        //发送ajax查询关注数量
+    $.ajax({
+            url: '/follow',
+            type: 'post',
+            data: {id:id},
+            success: function(data) {
+                $('#follows').html(data);
+            },
+            async: false
+        })
+        //发送ajax查询粉丝列表
+    $.ajax({
+        url: '/flists',
+        type: 'post',
+        data: {
+            id: id,
+            uid: hasLogin
+        },
+        success: function(data) {
+            if (data == 1) {
+                $('.follow').html('✔已关注');
+            } else {
+                $('.follow').html('关注');
+            }
+        },
+        async: false
+    })
+
+    $('.follow').click(function() {
+            // console.log('132154')
+                //检测是否登录
+            if (!hasLogin) {
+                alert('请先登陆!!!');
+                location.href = 'login?redirectUrl=' + location.href;
+                return false;
+            } else {
+                $.ajax({
+                    url: '/focus',
+                    type: 'post',
+                    data: {
+                        uid: hasLogin,
+                        id: id
+                    },
+                    success: function(data) {
+                        if (data == 1) {
+                            alert('关注成功');
+                            $('.follow').html('✔已关注');
+                            // $('.follow').addClass('cancel');
+                        }
+                    },
+                    async: false
+                })
+
+            }
+            window.location.reload();
+        })
+        //取消关注
+    if ($('.follow').html() == '✔已关注') {
+        $('.follow').click(function() {
+            $.ajax({
+                url: '/cancel',
+                type: 'post',
+                data: {
+                    uid: hasLogin,
+                    id: id
+                },
+                success: function(data) {
+                    // console.log(data);
+                    if (data == 1) {
+                        $('.follow').html('关注');
+                        alert('取关成功');
+                    }
+                },
+                async: false
+            })
+            window.location.reload();
+        })
+
+    }
+
+
+})
+</script>
+
+</html>
